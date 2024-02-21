@@ -1,24 +1,33 @@
 import random
 
-command12 = "d12"
+command12 = "d12+d4"
 
 
 def roll_dice(command: str) -> str:
-    d_counter: int = 0
+    final_result: int = 0
     num: str = ''
-    symb: str
-    for symb in command:
-        if symb.isdigit() and d_counter == 1:
-            num = num + symb
-        elif symb == 'd':
-            d_counter = d_counter + 1
+    symbol: str
+    index: int = len(command)
+    result_line: str = f'Result of rolling {command} is '
+    if command[0] != 'd':
+        return 'Error. Invalid command'
+    for symbol in command[1:]:
+        if symbol.isdigit():
+            num = num + symbol
+        elif symbol == '+':
+            index = command.find(symbol) + 1
+            result_line += roll_dice(command[index:])
+            break
         else:
-            return f"Error. Wrong input: only 1 \'d\' letter possible but it is {d_counter}"
-    return 'Result: ' + str(random.randint(1, int(num)))
+            return "Error. Wrong input: only numbers are allowed after d"
+    roll_result: int = random.randint(1, int(num))
+    dice_result: int = roll_result
+    while roll_result == int(num):
+        roll_result = random.randint(1, int(num))
+        dice_result += roll_result
+    if index == len(command):
+        return result_line
+    else:
+        return str(dice_result)
 
 print(roll_dice(command12))
-
-
-
-
-
