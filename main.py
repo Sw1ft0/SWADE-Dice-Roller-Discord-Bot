@@ -18,9 +18,9 @@ def roll_dice(command: str) -> str:
         for j, symbol in enumerate(dice):
             if j == 0 and symbol != 'd':
                 return "Error. Invalid command"
-            elif j != 0 and not symbol.isdigit():
+            if j != 0 and not symbol.isdigit():
                 return 'Error. Wrong input: only numbers are allowed after d'
-            elif symbol.isdigit():
+            if symbol.isdigit():
                 num = num + symbol
         result_line += f'{solve(int(num))}'
         if i != len(dices_list)-1:
