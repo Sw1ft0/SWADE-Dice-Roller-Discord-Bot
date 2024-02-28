@@ -15,16 +15,16 @@ def roll_dice(command: str) -> str:
     result_line: str = f'Result of rolling {command} is '
     dices_list: list[str] = command.split('+')
     for i, dice in enumerate(dices_list):
-        if dice[0] != 'd':
+        correctness_status: bool = dice.startswith("d")
+        if not correctness_status:
             return "Error. Invalid command"
-        for j, symbol in list(enumerate(dice))[1:]:
+        dice = dice.removeprefix("d")
+        for symbol in dice:
             if not symbol.isdigit():
                 return 'Error. Wrong input: only numbers are allowed after d'
-            num = num + symbol
-        result_line += f'{solve(int(num))}'
-        if i != len(dices_list)-1:
+        result_line += f'{solve(int(dice))}'
+        if i != len(dices_list) - 1:
             result_line += f' + '
-        num = ''
     return result_line
 
 
