@@ -5,16 +5,18 @@
 # /d12 : return number from 1 to 12.
 import random
 
-command12 = "dice12+d4+dice6"
+command12 = "2dice12+1d4+3dice6"
 
 
 def roll_dice(command: str) -> str:
-    num: str = ''
     symbol: str
     dice: str
+    prefix: str
     result_line: str = f'Result of rolling {command} is '
     dices_list: list[str] = command.split('+')
     for i, dice in enumerate(dices_list):
+        prefix = dice[:dice.find('d')]
+        dice = dice.removeprefix(prefix)
         if dice.startswith("dice"):
             dice = dice.removeprefix("dice")
         elif dice.startswith("d"):
@@ -23,10 +25,18 @@ def roll_dice(command: str) -> str:
             return "Error. Invalid command"
         for symbol in dice:
             if not symbol.isdigit():
-                return 'Error. Wrong input: only numbers are allowed after d'
-        result_line += f'{solve(int(dice))}'
-        if i != len(dices_list) - 1:
-            result_line += f' + '
+                return 'Error. Wrong input: only numbers are allowed after "d" or "dice"'
+        for symbol in prefix:
+            if not symbol.isdigit():
+                return 'Error. Wrong input: only numbers are allowed in prefix'
+        if prefix == '0':
+            return 'Error. Prefix can`t be 0'
+        if len(prefix) == 0:
+            prefix = '1'
+        for j in range(int(prefix)):
+            result_line += f'{solve(int(dice))}'
+            if j != int(prefix)-1 or i != len(dices_list) - 1:
+                result_line += f' + '
     return result_line
 
 
