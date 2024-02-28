@@ -5,7 +5,7 @@
 # /d12 : return number from 1 to 12.
 import random
 
-command12 = "d12+d4+d6"
+command12 = "dice12+d4+dice6"
 
 
 def roll_dice(command: str) -> str:
@@ -15,10 +15,12 @@ def roll_dice(command: str) -> str:
     result_line: str = f'Result of rolling {command} is '
     dices_list: list[str] = command.split('+')
     for i, dice in enumerate(dices_list):
-        correctness_status: bool = dice.startswith("d")
-        if not correctness_status:
+        if dice.startswith("dice"):
+            dice = dice.removeprefix("dice")
+        elif dice.startswith("d"):
+            dice = dice.removeprefix("d")
+        else:
             return "Error. Invalid command"
-        dice = dice.removeprefix("d")
         for symbol in dice:
             if not symbol.isdigit():
                 return 'Error. Wrong input: only numbers are allowed after d'
