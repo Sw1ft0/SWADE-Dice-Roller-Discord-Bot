@@ -4,8 +4,8 @@
 # /d10 : return number from 1 to 10.
 # /d12 : return number from 1 to 12.
 import random
-
-command12 = "2dice12+1d4+3dice6"
+import discord
+import os
 
 
 def roll_dice(command: str) -> str:
@@ -49,4 +49,12 @@ def solve(num: int) -> str:
     return str(dice_result)
 
 
-print(roll_dice(command12))
+
+bot = discord.Client(intents=discord.Intents(message_content=True, messages=True))
+
+
+@bot.event
+async def on_message(message):
+   if message.content.startswith('//'):
+         await message.channel.send(roll_dice(message.content[2:]))
+bot.run(os.getenv('TOKEN'))
