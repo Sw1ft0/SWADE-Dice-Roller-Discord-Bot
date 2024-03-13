@@ -6,36 +6,24 @@
 import random
 import discord
 import os
+import re
 
 
 def roll_dice(command: str) -> str:
-    symbol: str
     dice: str
-    prefix: str
+    quantity: int
     result_line: str = f'Result of rolling {command} is '
     dices_list: list[str] = command.split('+')
+    dice_pair = re.compile(r"^([1-9]?)(d|dice)([1-9]+)$")
     for i, dice in enumerate(dices_list):
-        prefix = dice[:dice.find('d')]
-        dice = dice.removeprefix(prefix)
-        if dice.startswith("dice"):
-            dice = dice.removeprefix("dice")
-        elif dice.startswith("d"):
-            dice = dice.removeprefix("d")
-        else:
+        try:
+            dice_pair.match(dice).group(3)
+        except AttributeError:
             return "Error. Invalid command"
-        for symbol in dice:
-            if not symbol.isdigit():
-                return 'Error. Wrong input: only numbers are allowed after "d" or "dice"'
-        for symbol in prefix:
-            if not symbol.isdigit():
-                return 'Error. Wrong input: only numbers are allowed in prefix'
-        if prefix == '0':
-            return 'Error. Prefix can`t be 0'
-        if len(prefix) == 0:
-            prefix = '1'
-        for j in range(int(prefix)):
-            result_line += f'{solve(int(dice))}'
-            if j != int(prefix)-1 or i != len(dices_list) - 1:
+        quantity = int(dice_pair.match(dice).group(1) if dice_pair.match(dice).group(1) != '' else 1)
+        for j in range(quantity):
+            result_line += f'{solve(int(dice_pair.match(dice).group(3)))}'
+            if j != quantity-1 or i != len(dices_list)-1:
                 result_line += f' + '
     return result_line
 
@@ -48,13 +36,12 @@ def solve(num: int) -> str:
         dice_result += roll_result
     return str(dice_result)
 
+if __name__ == '__main__':
+    bot = discord.Client(intents=discord.Intents(message_content=True, messages=True))
 
 
-bot = discord.Client(intents=discord.Intents(message_content=True, messages=True))
-
-
-@bot.event
-async def on_message(message):
-   if message.content.startswith('//'):
-         await message.channel.send(roll_dice(message.content[2:]))
-bot.run(os.getenv('TOKEN'))
+    @bot.event
+    async def on_message(message):
+       if message.content.startswith('//'):
+             await message.channel.send(roll_dice(message.content[2:]))
+    bot.run(os.getenv('TOKEN'))
