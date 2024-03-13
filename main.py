@@ -16,13 +16,12 @@ def roll_dice(command: str) -> str:
     dices_list: list[str] = command.split('+')
     dice_pair = re.compile(r"^([1-9]?)(d|dice)([1-9]+)$")
     for i, dice in enumerate(dices_list):
-        try:
-            dice_pair.match(dice).group(3)
-        except AttributeError:
+        if not dice_pair.match(dice):
             return "Error. Invalid command"
-        quantity = int(dice_pair.match(dice).group(1) if dice_pair.match(dice).group(1) != '' else 1)
+        dice_matched : re.Match[str] = dice_pair.match(dice)
+        quantity = int(dice_matched.group(1)) if dice_matched.group(1) else 1
         for j in range(quantity):
-            result_line += f'{solve(int(dice_pair.match(dice).group(3)))}'
+            result_line += f'{solve(int(dice_matched.group(3)))}'
             if j != quantity-1 or i != len(dices_list)-1:
                 result_line += f' + '
     return result_line
