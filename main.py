@@ -6,6 +6,7 @@
 import random
 import discord
 import os
+import sys
 import re
 
 
@@ -16,9 +17,9 @@ def roll_dice(command: str) -> str:
     dices_list: list[str] = command.split('+')
     dice_pair = re.compile(r"^([1-9]?)(d|dice)([1-9]+)$")
     for i, dice in enumerate(dices_list):
-        if not dice_pair.match(dice):
+        dice_matched: re.Match[str] | None = dice_pair.match(dice)
+        if not dice_matched:
             return "Error. Invalid command"
-        dice_matched : re.Match[str] = dice_pair.match(dice)
         quantity = int(dice_matched.group(1)) if dice_matched.group(1) else 1
         for j in range(quantity):
             result_line += f'{solve(int(dice_matched.group(3)))}'
@@ -35,12 +36,16 @@ def solve(num: int) -> str:
         dice_result += roll_result
     return str(dice_result)
 
+
 if __name__ == '__main__':
     bot = discord.Client(intents=discord.Intents(message_content=True, messages=True))
 
-
     @bot.event
     async def on_message(message):
-       if message.content.startswith('//'):
-             await message.channel.send(roll_dice(message.content[2:]))
-    bot.run(os.getenv('TOKEN'))
+        if message.content.startswith('//'):
+            await message.channel.send(roll_dice(message.content[2:]))
+    token = os.getenv('TOKEN')
+    if not token:
+        print('There is no token specified')
+        sys.exit(1)
+    bot.run(token)
