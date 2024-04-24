@@ -1,6 +1,8 @@
 import unittest
-
+import tokenizer
 import parser
+import graph
+import condition
 
 
 class TestGraphNodes(unittest.TestCase):
@@ -18,8 +20,8 @@ class TestGraphNodes(unittest.TestCase):
         another = graph.Node('another')
         some.add_out_edge(another.get_id(), condition.Any())
 
-        found_edge = some.FindEdge(
-            tokenizer.Token('type', 'value', 'position'))
+        found_edge = some.snake_case(
+            tokenizer.Token('type', 'value', 1))
 
         self.assertIsNotNone(found_edge)
 
@@ -34,7 +36,7 @@ class TestGraphNodes(unittest.TestCase):
         some.add_out_edge(another.get_id(), condition.Any())
         state_machine = parser.StateMachine([some, another], some)
 
-        state_machine.move_one_step(Token('type', 'value', 'position'))
+        state_machine.move_one_step(tokenizer.Token('type', 'value', 1))
 
         self.assertEqual(state_machine.get_current_state(), another.get_id())
 
