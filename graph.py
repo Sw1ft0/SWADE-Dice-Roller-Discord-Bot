@@ -33,6 +33,6 @@ class Node:
             if token.type == edge.name:
                 return edge
 
-    def snake_case(self, token: tokenizer.Token):
+    def find_edge(self, token: tokenizer.Token):
         edge = self.get_edge(token)
         return edge

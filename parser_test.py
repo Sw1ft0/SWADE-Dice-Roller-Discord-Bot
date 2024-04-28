@@ -20,7 +20,7 @@ class TestGraphNodes(unittest.TestCase):
         another = graph.Node('another')
         some.add_out_edge(another.get_id(), condition.Any())
 
-        found_edge = some.snake_case(
+        found_edge = some.find_edge(
             tokenizer.Token('type', 'value', 1))
 
         self.assertIsNotNone(found_edge)
