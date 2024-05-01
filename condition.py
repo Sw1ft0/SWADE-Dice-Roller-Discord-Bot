@@ -24,7 +24,7 @@ class RegexKeyword(Condition):
 class TokenKind(Condition):
 
     def __init__(self, kind: str):
-        self.kind = kind
+        self.kind: str = kind
 
     def satisfies_condition(self, token: tokenizer.Token) -> bool:
         pass
