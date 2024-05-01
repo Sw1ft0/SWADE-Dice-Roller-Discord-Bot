@@ -28,10 +28,10 @@ edge_list: list[Edge] = [
 print(edge_list)
 
 
-def tokenize(command):
+def tokenize(command: str) -> Token:
     token_specification = [
         ('NUMBER', r'\d+'),  # Integer number
-        ('KEYWORD', r'dice|DICE|d|D'),  # Identifiers
+        ('KEYWORD', r'(?i)d(ice)?'),  # Identifiers
         ('OP', r'[+\-*/]'),  # Arithmetic operators
         ('SKIP', r'[ \t]+'),  # Skip over spaces and tabs
         ('MISMATCH', r'.'),  # Any other character
@@ -49,7 +49,7 @@ def tokenize(command):
         yield Token(str(kind), str(value), position)
 
 
-def roll_with_tokenizer(command):
+def roll_with_tokenizer(command: str) -> str:
     x = tokenize(command)
     keyword_indicator = False
     quantity: int = 1

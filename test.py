@@ -16,9 +16,9 @@ test_commands_list: list[str] = [
 for command in test_commands_list:
     print(main.roll_dice(command))
 
-# for command in test_commands_list:
-#     for token in tokenizer.tokenize(command):
-#         print(token)
+for command in test_commands_list:
+    for token in tokenizer.tokenize(command):
+        print(token)
 
 print()
 for command in test_commands_list:
