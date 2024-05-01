@@ -31,7 +31,7 @@ print(edge_list)
 def tokenize(command):
     token_specification = [
         ('NUMBER', r'\d+'),  # Integer number
-        ('KEYWORD', r'dice|DICE|d|D'),  # Identifiers
+        ('KEYWORD', r'(?i)d(ice)?'),  # Identifiers
         ('OP', r'[+\-*/]'),  # Arithmetic operators
         ('SKIP', r'[ \t]+'),  # Skip over spaces and tabs
         ('MISMATCH', r'.'),  # Any other character
