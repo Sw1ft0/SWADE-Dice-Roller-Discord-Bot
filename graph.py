@@ -6,10 +6,10 @@ class Edge:
     id_iter = itertools.count()
 
     def __init__(self, from_id, to_id, condition):
-        self.name = "type"
-        self.id = next(self.id_iter)
-        self.from_id = from_id
-        self.to_id = to_id
+        self.name: str = "type"
+        self.id: int = next(self.id_iter)
+        self.from_id: int = from_id
+        self.to_id: int = to_id
         self.condition = condition
 
 
