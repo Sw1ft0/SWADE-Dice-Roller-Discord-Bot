@@ -1,11 +1,15 @@
 import tokenizer
+from abc import ABC, abstractmethod
 
 
-class Any:
-    pass
+class Condition(ABC):
+
+    @abstractmethod
+    def satisfies_condition(self, token: tokenizer.Token) -> bool:
+        pass
 
 
-class RegexKeyword:
+class RegexKeyword(Condition):
 
     def __init__(self):
         self.regex: str = r'(?i)d(ice)?'
@@ -17,15 +21,28 @@ class RegexKeyword:
         return False
 
 
-class TokenKind:
+class TokenKind(Condition):
 
     def __init__(self, kind: str):
         self.kind = kind
 
+    def satisfies_condition(self, token: tokenizer.Token) -> bool:
+        pass
 
-class PositiveInt:
-    pass
+
+class PositiveInt(Condition):
+
+    def satisfies_condition(self, token: tokenizer.Token) -> bool:
+        pass
 
 
-class Operator:
-    pass
+class Operator(Condition):
+
+    def satisfies_condition(self, token: tokenizer.Token) -> bool:
+        pass
+
+
+class Any(Condition):
+
+    def satisfies_condition(self, token: tokenizer.Token) -> bool:
+        pass
